@@ -13,7 +13,7 @@ public class Installers : MonoInstaller
     private void BindServices()
     {
         Container.Bind<IStorageService>().To<JsonToFileStorageService>().FromNew().AsSingle();
-        Container.Bind<CharacterCarSpawnerService>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<CharacterCarSpawnerFactory>().FromComponentInHierarchy().AsSingle();
     }
 
     private void BindFactories()

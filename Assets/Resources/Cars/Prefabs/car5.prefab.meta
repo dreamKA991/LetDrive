@@ -1,14 +1,7 @@
 fileFormatVersion: 2
-guid: a3c146124ef3748eebcd3a883c40d225
+guid: 87d40b702e62cea4b9584e57d6972271
 PrefabImporter:
   externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 278056
-  packageName: Simple Car Pack
-  packageVersion: 1.0
-  assetPath: Assets/BabyCheese/LowPolyCars/Prefabs/car-2-2_Prefab.prefab
-  uploadId: 646478
