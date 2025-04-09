@@ -19,13 +19,17 @@ public class BOOT : MonoBehaviour
         _roadSpawnerFactory = roadSpawnerFactory;
         _cameraFollow = Camera.main.AddComponent<CameraFollow>();
         LoadSettings();
+    }
+
+    private void Start()
+    {
         StartGame();
     }
 
     private void StartGame()
     {
         var iCharacterCar = _characterCarSpawnerFactory.LoadAndSpawnCar();
-        _roadSpawnerFactory.Init(iCharacterCar.GetTransform());
+        _roadSpawnerFactory.Init(iCharacterCar);
         _cameraFollow.Init(iCharacterCar, false);
     }
     

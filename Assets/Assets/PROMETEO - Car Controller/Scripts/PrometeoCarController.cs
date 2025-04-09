@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
+
 [RequireComponent(typeof(Rigidbody))]
 public class PrometeoCarController : MonoBehaviour, ICharacterCar
 {
@@ -104,6 +107,8 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
      public bool IsBot = true;
      public float MaxBotCarSpeed = 5f;
      public float MinGameCarSpeed = 5f;
+     public int RoadLaneTaked;
+     private RoadConfig _roadConfig;
     //CAR DATA
 
       public float carSpeed { get; private set; } // Used to store the speed of the car.
@@ -138,7 +143,12 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
       private float RLWextremumSlip;
       private WheelFrictionCurve RRwheelFriction;
       private float RRWextremumSlip;
-
+      
+      [Inject]
+      private void Construct(RoadConfig roadConfig)
+      {
+        _roadConfig = roadConfig;
+      }
 
     void Start()
     {
@@ -393,6 +403,7 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
     }
     
     public void ResetSteeringAngle(){
+      Debug.Log("ResetSteeringAngle");
       if(steeringAxis < 0f){
         steeringAxis = steeringAxis + (Time.deltaTime * 10f * steeringSpeed);
       }else if(steeringAxis > 0f){
@@ -410,6 +421,24 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
       isRightTurning = false;
       DriftCarPS();
     }
+    
+    public void AIResetSteeringAngle()
+    {
+      Debug.Log("AIResetSteeringAngle");
+      steeringAxis = 0f;
+      float steeringAngle = 0f;
+
+      frontLeftCollider.steerAngle = steeringAngle;
+      frontRightCollider.steerAngle = steeringAngle;
+      rearLeftCollider.steerAngle = steeringAngle;
+      rearRightCollider.steerAngle = steeringAngle;
+
+      isLeftTurning = false;
+      isRightTurning = false;
+
+      DriftCarPS();
+    }
+
     
     void AnimateWheelMeshes(){
       try{
@@ -564,5 +593,57 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
         }
       }
     }
-  public Transform GetTransform(){ Debug.Log("baba"); return transform; }
+    
+  public Transform GetTransform() => transform;
+  
+  public void ChangeLine()
+  {
+    Debug.Log("Текущая линия: " + RoadLaneTaked);
+
+    switch (RoadLaneTaked)
+    {
+      case 0: // right lane
+        Debug.Log("Поворот влево, switch");
+        StartCoroutine(AILeftTurnCoroutine(_roadConfig.XCoordLines[1]));
+        break;
+      case 1: // left lane
+        Debug.Log("Поворот вправо, switch.");
+        StartCoroutine(AIRightTurnCoroutine(_roadConfig.XCoordLines[0]));
+        break;
+      default:
+        Debug.LogWarning("Неизвестная линия дороги: " + RoadLaneTaked);
+        break;
+    }
+  }
+
+  private IEnumerator AILeftTurnCoroutine(float tillXCoord)
+  {
+    while (transform.position.x > tillXCoord)
+    {
+      Debug.Log("Поворот влево, transform.x: " + transform.position.x + " > tillXCoord: " + tillXCoord);
+
+      TurnLeft(); // убедись, что этот метод корректно поворачивает или двигает объект
+
+      yield return null; // ждем следующий кадр
+    }
+    Debug.Log("Достигли нужной координаты X: " + transform.position.x);
+    AIResetSteeringAngle();
+    RoadLaneTaked = 1;
+  }
+  
+  private IEnumerator AIRightTurnCoroutine(float tillXCoord)
+  {
+    while (transform.position.x < tillXCoord)
+    {
+      Debug.Log("Поворот вправо, transform.x: " + transform.position.x + " < tillXCoord: " + tillXCoord);
+
+      TurnRight(); // убедись, что этот метод корректно поворачивает или двигает объект
+
+      yield return null; // ждем следующий кадр
+    }
+    Debug.Log("Достигли нужной координаты X: " + transform.position.x);
+    AIResetSteeringAngle();
+    RoadLaneTaked = 0;
+  }
+
 }

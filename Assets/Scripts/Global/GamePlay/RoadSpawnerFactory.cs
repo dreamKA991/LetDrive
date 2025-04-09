@@ -6,20 +6,22 @@ public class RoadSpawnerFactory : MonoBehaviour
 {
     private GameObject _prefab;
     private float _roadOffset = 10f;  
-    private float roadDeltaZ = 30f;   
-    private Queue<Transform> roads = new Queue<Transform>(); 
-    private Transform _player; 
+    private float _roadDeltaZ = 30f;   
+    private Queue<Transform> _roads = new Queue<Transform>(); 
+    private Transform _playerTransform; 
     private const int INITIAL_ROADS = 20;
-
+    private const int ROAD_DELAY_PER_FIRST_SPAWN_AI_CARS = 2;
+    private TrafficSpawnerService _trafficSpawnerService;
     [Inject]
-    private void Construct(RoadConfig roadConfig)
+    private void Construct(RoadConfig roadConfig, TrafficSpawnerService trafficSpawnerService)
     {
         _prefab = roadConfig.RoadPrefab;
+        _trafficSpawnerService = trafficSpawnerService;
     }
     
-    public void Init(Transform player)
+    public void Init(ICharacterCar player)
     {
-        _player = player;
+        _playerTransform = player.GetTransform();
         SpawnInitialRoads();
     }
 
@@ -29,14 +31,19 @@ public class RoadSpawnerFactory : MonoBehaviour
         {
             Vector3 spawnPosition = Vector3.forward * (i * _roadOffset);
             GameObject newRoad = Instantiate(_prefab, spawnPosition, Quaternion.identity);
-            roads.Enqueue(newRoad.transform);
+            _roads.Enqueue(newRoad.transform);
+            if (i > ROAD_DELAY_PER_FIRST_SPAWN_AI_CARS)
+            {
+                Transform lastRoad = GetLastRoad();
+                _trafficSpawnerService.TrySpawnCar(lastRoad);
+            }
         }
     }
 
     private void Update()
     {
-        Transform firstRoad = roads.Peek();
-        if (firstRoad.position.z < _player.position.z - roadDeltaZ)
+        Transform firstRoad = _roads.Peek();
+        if (firstRoad.position.z < _playerTransform.position.z - _roadDeltaZ)
         {
             MoveRoad();
         }
@@ -44,19 +51,18 @@ public class RoadSpawnerFactory : MonoBehaviour
 
     private void MoveRoad()
     {
-        Transform road = roads.Dequeue();
-        
+        Transform road = _roads.Dequeue();
         Transform lastRoad = GetLastRoad();
         
         road.position = lastRoad.position + Vector3.forward * _roadOffset;
-        
-        roads.Enqueue(road);
+        _trafficSpawnerService.TrySpawnCar(lastRoad);
+        _roads.Enqueue(road);
     }
 
     private Transform GetLastRoad()
     {
         Transform last = null;
-        foreach (Transform road in roads)
+        foreach (Transform road in _roads)
         {
             last = road;
         }
