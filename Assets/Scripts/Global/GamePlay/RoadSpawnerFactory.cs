@@ -10,7 +10,7 @@ public class RoadSpawnerFactory : MonoBehaviour
     private Queue<Transform> _roads = new Queue<Transform>(); 
     private Transform _playerTransform; 
     private const int INITIAL_ROADS = 20;
-    private const int ROAD_DELAY_PER_FIRST_SPAWN_AI_CARS = 2;
+    private const int ROAD_DELAY_PER_FIRST_SPAWN_AI_CARS = 1;
     private TrafficSpawnerService _trafficSpawnerService;
     [Inject]
     private void Construct(RoadConfig roadConfig, TrafficSpawnerService trafficSpawnerService)

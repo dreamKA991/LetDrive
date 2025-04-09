@@ -18,7 +18,7 @@ public class CharacterAILogic : MonoBehaviour
         _sphereCollider = this.AddComponent<SphereCollider>();
         _sphereCollider.radius = 1f;
         _sphereCollider.isTrigger = true;
-        _sphereCollider.center = new Vector3(0f, 1.2f, 10f);
+        _sphereCollider.center = new Vector3(0f, 1.2f, 20f);
     }
 
     private void OnTriggerEnter(Collider other)
