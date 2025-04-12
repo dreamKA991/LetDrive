@@ -1,10 +1,8 @@
-using Global.SaveLoad;
-using Unity.VisualScripting;
 using Zenject;
 
 public class MenuInstallers : MonoInstaller
 {
-    public RoadConfig _roadConfig;
+    public RoadConfig RoadConfig;
     public override void InstallBindings()
     {
         BindServices();
@@ -13,10 +11,9 @@ public class MenuInstallers : MonoInstaller
 
     private void BindServices()
     {
-        Container.Bind<RoadConfig>().FromInstance(_roadConfig).AsSingle();
+        Container.Bind<RoadConfig>().FromInstance(RoadConfig).AsSingle();
         TrafficSpawnerService trafficSpawnerService = Container.InstantiateComponentOnNewGameObject<TrafficSpawnerService>();
         Container.Bind<TrafficSpawnerService>().FromInstance(trafficSpawnerService).AsSingle();
-        Container.Bind<IStorageService>().To<JsonToFileStorageService>().FromNew().AsSingle().NonLazy();
     }
 
     private void BindFactories()

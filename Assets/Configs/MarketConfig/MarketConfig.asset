@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7103feef576ee85438eacbc0396bdfd4, type: 3}
+  m_Name: MarketConfig
+  m_EditorClassIdentifier: 
+  Cars:
+  - Name: American dream
+    Price: 0
+    Prefab: {fileID: 642287924342879162, guid: 53e7a3d64313acb4c95c1663a01d4cbe, type: 3}
+    Speed: 50
+    Handling: 50
+    Braking: 50
+  - Name: Sweetie BolotoCar
+    Price: 500
+    Prefab: {fileID: 6627719025246014540, guid: 373cc3ec7788ee249be352ec2de6f2c6, type: 3}
+    Speed: 75
+    Handling: 75
+    Braking: 75
+  - Name: Kinda Homer Simpson
+    Price: 1000
+    Prefab: {fileID: 6627719025246014540, guid: e6b2975bcd5521740ac359c6b9e46383, type: 3}
+    Speed: 100
+    Handling: 100
+    Braking: 100

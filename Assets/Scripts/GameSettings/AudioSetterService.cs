@@ -1,11 +1,18 @@
 using UnityEngine;
 using UnityEngine.Audio;
+using Zenject;
 
 public class AudioSetterService : MonoBehaviour
 {
-    [SerializeField] private AudioMixerGroup _audioMixerGroup;
+    private AudioMixerGroup _audioMixerGroup;
     private float _musicVolume;
 
+    [Inject]
+    private void Construct()
+    {
+        _audioMixerGroup = GameObject.Find("Music").GetComponent<AudioSource>().outputAudioMixerGroup;
+    }
+    
     public void SetMusicToggle(bool value)
     {
         float newVolume = value ? _musicVolume : -80f;
@@ -18,7 +25,6 @@ public class AudioSetterService : MonoBehaviour
         SetVolume(newVolume, "Music");
         _musicVolume = newVolume;
     }
-
     
     private void SetVolume(float value, string name) => 
         _audioMixerGroup.audioMixer.SetFloat(name, value);

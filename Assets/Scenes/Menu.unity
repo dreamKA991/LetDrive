@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1601f3c6cda61f646a2036286b4d3b30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roadConfig: {fileID: 11400000, guid: 9c30b93dbcffef449960a1e8946f2efc, type: 2}
+  RoadConfig: {fileID: 11400000, guid: 9c30b93dbcffef449960a1e8946f2efc, type: 2}
 --- !u!1 &134464014
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,6 +619,7 @@ GameObject:
   - component: {fileID: 416958904}
   - component: {fileID: 416958903}
   - component: {fileID: 416958902}
+  - component: {fileID: 416958908}
   m_Layer: 5
   m_Name: SettingsCanvas
   m_TagString: Untagged
@@ -747,6 +748,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!225 &416958908
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416958901}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &429978570
 GameObject:
   m_ObjectHideFlags: 0
@@ -1086,13 +1099,14 @@ GameObject:
   - component: {fileID: 721559704}
   - component: {fileID: 721559703}
   - component: {fileID: 721559702}
+  - component: {fileID: 721559706}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &721559702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1176,6 +1190,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!225 &721559706
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721559701}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &737151188
 GameObject:
   m_ObjectHideFlags: 0
@@ -1841,6 +1867,7 @@ GameObject:
   - component: {fileID: 1038426190}
   - component: {fileID: 1038426193}
   - component: {fileID: 1038426192}
+  - component: {fileID: 1038426194}
   m_Layer: 0
   m_Name: ===TECH===
   m_TagString: Untagged
@@ -1860,9 +1887,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820980f338fc14d47bcb7b2c51b5609f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicToggle: {fileID: 1379545304}
-  musicSlider: {fileID: 754406153}
-  fpsDropdown: {fileID: 1072093288}
+  _musicToggle: {fileID: 1379545304}
+  _musicSlider: {fileID: 754406153}
+  _fpsDropdown: {fileID: 1072093288}
+  _playButton: {fileID: 1487826378}
+  _settingsButton: {fileID: 429978572}
+  _backButton: {fileID: 1570781173}
 --- !u!4 &1038426191
 Transform:
   m_ObjectHideFlags: 0
@@ -1908,6 +1938,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c7d2336fd45bf4993f37f3493b7ed7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1038426194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038426189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a422159edd0824342ae28474de85df07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainCanvasGroup: {fileID: 721559706}
+  _settingsCanvasGroup: {fileID: 416958908}
 --- !u!1 &1072093286
 GameObject:
   m_ObjectHideFlags: 0

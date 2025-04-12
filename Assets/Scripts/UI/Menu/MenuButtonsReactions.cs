@@ -2,22 +2,30 @@ using Global.SaveLoad;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Zenject;
 
-[RequireComponent(typeof(GraphicSetterService), typeof(AudioSetterService))]
+[RequireComponent(typeof(GraphicSetterService), typeof(AudioSetterService), typeof(MenuAnimations))]
 public class MenuButtonsReactions : MonoBehaviour
 {
-    [SerializeField] private Toggle musicToggle;
-    [SerializeField] private Slider musicSlider;
-    [SerializeField] private TMP_Dropdown fpsDropdown;
+    [SerializeField] private Toggle _musicToggle;
+    [SerializeField] private Slider _musicSlider;
+    [SerializeField] private TMP_Dropdown _fpsDropdown;
+    [SerializeField] private Button _playButton;
+    [SerializeField] private Button _settingsButton;
+    [SerializeField] private Button _backButton;
     private GraphicSetterService _graphicSetterService;
     private AudioSetterService _audioSetterService;
+    private MenuAnimations _menuAnimations;
     private IStorageService _storageService;
+    private SaveLoadPlayerSettingsService _saveLoadPlayerSettingsService;
+    
     [Inject]
-    private void Construct(IStorageService storageService)
+    private void Construct(IStorageService storageService, SaveLoadPlayerSettingsService saveLoadPlayerSettingsService)
     {
         _storageService = storageService;
+        _saveLoadPlayerSettingsService = saveLoadPlayerSettingsService;
     }
 
     private void Start() => Init();
@@ -26,15 +34,19 @@ public class MenuButtonsReactions : MonoBehaviour
     {
         _graphicSetterService = GetComponent<GraphicSetterService>();
         _audioSetterService = GetComponent<AudioSetterService>();
+        _menuAnimations = GetComponent<MenuAnimations>();
         SubscribeUIElements();
         LoadSettings();
     }
 
     private void SubscribeUIElements()
     {
-        musicToggle.onValueChanged.AddListener(OnMusicCheckBoxChanged);
-        musicSlider.onValueChanged.AddListener(OnMusicSliderChanged);
-        fpsDropdown.onValueChanged.AddListener(OnFpsTargetDropdownChanged);
+        _musicToggle.onValueChanged.AddListener(OnMusicCheckBoxChanged);
+        _musicSlider.onValueChanged.AddListener(OnMusicSliderChanged);
+        _fpsDropdown.onValueChanged.AddListener(OnFpsTargetDropdownChanged);
+        _playButton.onClick.AddListener(PlayButtonPressed);
+        _settingsButton.onClick.AddListener(SettingsButtonPressed);
+        _backButton.onClick.AddListener(BackButtonPressed);
     }
     
     public void PlayButtonPressed()
@@ -42,36 +54,26 @@ public class MenuButtonsReactions : MonoBehaviour
         SceneManager.LoadSceneAsync("Garage");
     }
 
-    public void SettingsButtonPressed()
-    {
-        
-    }
-
+    public void SettingsButtonPressed() => _menuAnimations.ShowSettingsCanvas();
+    
+    public void BackButtonPressed() => _menuAnimations.ShowMainCanvas();
+    
     public void SaveSettings()
     {
-        SettingsData newSettingsData = new SettingsData();
-        newSettingsData.isMusicEnabled = musicToggle.isOn;
-        newSettingsData.MusicVolume = musicSlider.value;
-        newSettingsData.TargetFPS = fpsDropdown.value;
-        _storageService.Save(ProjectConstantKeys.SETTINGSDATA, newSettingsData);
+        _saveLoadPlayerSettingsService.SaveSettings(_musicToggle.isOn, _musicSlider.value, _fpsDropdown.value);
     }
-
+    
     public void LoadSettings()
     {
-        SettingsData settingsData = _storageService.Load<SettingsData>(ProjectConstantKeys.SETTINGSDATA);
-        if (settingsData == null)
-        {
-            SaveSettings();
-            settingsData = _storageService.Load<SettingsData>(ProjectConstantKeys.SETTINGSDATA);
-        }
+        SettingsData settingsData = _saveLoadPlayerSettingsService.LoadSettings();
 
-        musicToggle.isOn = settingsData.isMusicEnabled;
+        _musicToggle.isOn = settingsData.isMusicEnabled;
         OnMusicCheckBoxChanged(settingsData.isMusicEnabled);
         
-        musicSlider.value = settingsData.MusicVolume;
+        _musicSlider.value = settingsData.MusicVolume;
         OnMusicSliderChanged(settingsData.MusicVolume);
         
-        fpsDropdown.value = settingsData.TargetFPS; 
+        _fpsDropdown.value = settingsData.TargetFPS; 
         OnFpsTargetDropdownChanged(settingsData.TargetFPS);
     }
     
@@ -92,8 +94,7 @@ public class MenuButtonsReactions : MonoBehaviour
     private void OnFpsTargetDropdownChanged(int value)
     {
         Debug.Log("OnFpsTargetDropdownChanged: " + value);
-        int fpsValue = int.Parse(fpsDropdown.options[fpsDropdown.value].text);
-        _graphicSetterService.SetFpsTarget(fpsValue);
+        _graphicSetterService.SetFpsTarget(value);
         SaveSettings();
     }
 }

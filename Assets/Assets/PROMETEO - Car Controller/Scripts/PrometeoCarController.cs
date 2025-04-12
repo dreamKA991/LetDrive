@@ -598,16 +598,13 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
   
   public void ChangeLine()
   {
-    Debug.Log("Текущая линия: " + RoadLaneTaked);
 
     switch (RoadLaneTaked)
     {
       case 0: // right lane
-        Debug.Log("Поворот влево, switch");
         StartCoroutine(AILeftTurnCoroutine(_roadConfig.XCoordLines[1]));
         break;
       case 1: // left lane
-        Debug.Log("Поворот вправо, switch.");
         StartCoroutine(AIRightTurnCoroutine(_roadConfig.XCoordLines[0]));
         break;
       default:
@@ -620,13 +617,9 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
   {
     while (transform.position.x > tillXCoord)
     {
-      Debug.Log("Поворот влево, transform.x: " + transform.position.x + " > tillXCoord: " + tillXCoord);
-
-      TurnLeft(); // убедись, что этот метод корректно поворачивает или двигает объект
-
-      yield return null; // ждем следующий кадр
+      TurnLeft(); 
+      yield return null;
     }
-    Debug.Log("Достигли нужной координаты X: " + transform.position.x);
     AIResetSteeringAngle();
     RoadLaneTaked = 1;
   }
@@ -635,13 +628,9 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
   {
     while (transform.position.x < tillXCoord)
     {
-      Debug.Log("Поворот вправо, transform.x: " + transform.position.x + " < tillXCoord: " + tillXCoord);
-
-      TurnRight(); // убедись, что этот метод корректно поворачивает или двигает объект
-
-      yield return null; // ждем следующий кадр
+      TurnRight();
+      yield return null;
     }
-    Debug.Log("Достигли нужной координаты X: " + transform.position.x);
     AIResetSteeringAngle();
     RoadLaneTaked = 0;
   }
