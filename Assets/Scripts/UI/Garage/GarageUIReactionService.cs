@@ -2,12 +2,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Zenject;
 
 public class GarageUIReactionService : MonoBehaviour
 {
+    // PLAYER DATA
+    [SerializeField] private TMP_Text _moneyText;
+    
     // CAR INFO 
     [SerializeField] private Slider _speedSlider;
     [SerializeField] private TMP_Text _speedText;
+    [SerializeField] private TMP_Text _priceCarText;
     
     [SerializeField] private Slider _handlingSlider;
     [SerializeField] private TMP_Text _handlingText;
@@ -22,6 +27,14 @@ public class GarageUIReactionService : MonoBehaviour
     [SerializeField] private Button _selectNextCarArrowButton;
     [SerializeField] private Button _selectPreviuosCarArrowButton;
 
+    private ShowCarCommand _showCarCommand;
+    
+    [Inject]
+    private void Construct(ShowCarCommand showCarCommand)
+    {
+        _showCarCommand = showCarCommand;
+    }
+    
     private void Start()
     {
         SubscribeButtons();
@@ -36,15 +49,18 @@ public class GarageUIReactionService : MonoBehaviour
         _buyButton.onClick.AddListener(BuyButtonPressed);
     }
 
-    public void NextCarButtonPressed()
-    {
-        
-    }
+    public void NextCarButtonPressed() => _showCarCommand.ShowNextCar();
     
-    public void PreviousCarButtonPressed() {}
+    public void PreviousCarButtonPressed() => _showCarCommand.ShowPreviousCar();
 
-    public void BuyButtonPressed() {}
-    
+    public void BuyButtonPressed() => _showCarCommand.TryBuyCar();
+
+    public void SetActiveBuyButtonAndPriceText(bool active)
+    {
+        _priceCarText.gameObject.SetActive(active);
+        _buyButton.gameObject.SetActive(active);
+    }
+
     public void PlayButtonPressed()
     {
         SceneManager.LoadSceneAsync("GamePlay");
@@ -71,5 +87,15 @@ public class GarageUIReactionService : MonoBehaviour
     {
         _brakingSlider.value = value;
         _brakingText.text = value.ToString();
+    }
+
+    public void SetMoneyText(int value)
+    {
+        _moneyText.text = value.ToString();
+    }
+
+    public void SetCarPriceText(float value)
+    {
+        _priceCarText.text = "COST: " + value.ToString();
     }
 }

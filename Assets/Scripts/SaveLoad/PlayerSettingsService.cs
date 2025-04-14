@@ -1,7 +1,7 @@
 using Global.SaveLoad;
 using Zenject;
 
-public class SaveLoadPlayerSettingsService
+public class PlayerSettingsService
 {
     private IStorageService _storageService;
     private AudioSetterService _audioSetterService;

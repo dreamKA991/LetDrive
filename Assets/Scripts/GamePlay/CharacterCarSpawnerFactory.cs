@@ -18,20 +18,20 @@ public class CharacterCarSpawnerFactory : MonoBehaviour
 
     public ICharacterCar LoadAndSpawnCar(bool isBot = true)
     {
-        string carName = _storageService.Load<string>(ProjectConstantKeys.SELECTEDCARNAME);
+        string carIndex = _storageService.Load<string>(ProjectConstantKeys.SELECTEDCARINDEX);
         Quaternion quaternion = Quaternion.Euler(0, 0, 0);
         GameObject obj;
         
-        if (carName == null)
+        if (carIndex == null)
         {
             Debug.LogWarning("Spawning default car");
-            obj = _container.InstantiatePrefab(Resources.Load<GameObject>("Cars/" + ProjectConstantKeys.DEFAULTCARPREFABNAME), transform.position, quaternion, null);
-            _storageService.Save(ProjectConstantKeys.SELECTEDCARNAME, ProjectConstantKeys.DEFAULTCARPREFABNAME);
+            obj = _container.InstantiatePrefab(Resources.Load<GameObject>("Cars/car" + ProjectConstantKeys.DEFAULTCARINDEX), transform.position, quaternion, null);
+            _storageService.Save(ProjectConstantKeys.SELECTEDCARINDEX, ProjectConstantKeys.DEFAULTCARINDEX);
         }
         else
         {
-            Debug.LogWarning("Spawning car: " + carName);
-            obj = _container.InstantiatePrefab(Resources.Load<GameObject>("Cars/" + carName), transform.position, quaternion, null);
+            Debug.LogWarning("Spawning car: " + carIndex);
+            obj = _container.InstantiatePrefab(Resources.Load<GameObject>("Cars/car" + carIndex), transform.position, quaternion, null);
         }
         PrometeoCarController prometeoCarController;
         prometeoCarController = obj.GetComponent<PrometeoCarController>();

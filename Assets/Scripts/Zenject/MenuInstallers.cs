@@ -3,6 +3,7 @@ using Zenject;
 public class MenuInstallers : MonoInstaller
 {
     public RoadConfig RoadConfig;
+    
     public override void InstallBindings()
     {
         BindServices();
@@ -12,6 +13,7 @@ public class MenuInstallers : MonoInstaller
     private void BindServices()
     {
         Container.Bind<RoadConfig>().FromInstance(RoadConfig).AsSingle();
+        
         TrafficSpawnerService trafficSpawnerService = Container.InstantiateComponentOnNewGameObject<TrafficSpawnerService>();
         Container.Bind<TrafficSpawnerService>().FromInstance(trafficSpawnerService).AsSingle();
     }
@@ -21,14 +23,14 @@ public class MenuInstallers : MonoInstaller
         BindCharacterCarFactory();
         BindRoadFactory();
     }
-
+    
     private void BindCharacterCarFactory()
     {
         CharacterCarSpawnerFactory characterCarSpawnerFactory = Container
             .InstantiateComponentOnNewGameObject<CharacterCarSpawnerFactory>();
         Container.Bind<CharacterCarSpawnerFactory>().FromInstance(characterCarSpawnerFactory).AsSingle().NonLazy();
     }
-
+    
     private void BindRoadFactory()
     {
         RoadSpawnerFactory roadSpawnerFactory = Container

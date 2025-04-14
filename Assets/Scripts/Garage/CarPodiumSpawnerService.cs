@@ -7,55 +7,45 @@ public class CarPodiumSpawnerService : MonoBehaviour
     private MarketConfig _marketConfig; 
     private IStorageService _storageService;
     private GameObject _car;
-    private int _selectedCar;
     private Vector3 _spawnPosition = new Vector3(0f,0.22f,0);
-    
+    private Quaternion _spawnRotation = Quaternion.Euler(0, 190, 0);
     [Inject]
-    private void Construct(MarketConfig marketConfig, IStorageService storageService)
+    private void Construct(IStorageService storageService, MarketConfig marketConfig)
     {
-        _marketConfig = marketConfig;
         _storageService = storageService;
-    }
-
-    public void SpawnNextCar()
-    {
-        if (_selectedCar < _marketConfig.Cars.Count)
-        {
-            _selectedCar++;
-        }
-        else
-        {
-            _selectedCar = 0;
-        }
-        SpawnCar(_selectedCar);
+        _marketConfig = marketConfig;
     }
     
-    public void SpawnPreviousCar() {}
-
-    private void SpawnCar(int index)
+    public void SpawnCar(int index)
     {
-        if (_car != null) Destroy(_car);
+        if (_car != null) DestroyOldCar();
         _car = _marketConfig.Cars[index].Prefab;
-        GameObject newCar = Instantiate(_car, _spawnPosition, transform.rotation);
+        GameObject newCar = Instantiate(_car, _spawnPosition, _spawnRotation);
+        _car = newCar;
         Destroy(newCar.GetComponent<PrometeoCarController>());
     }
 
-    public void SpawnFirstCar()
+    public void SpawnSavedSelectedCar()
     {
-        string carName = _storageService.Load<string>(ProjectConstantKeys.SELECTEDCARNAME);
-        Quaternion quaternion = Quaternion.Euler(0, 190, 0);
+        string carIndex = _storageService.Load<string>(ProjectConstantKeys.SELECTEDCARINDEX);
         
-        if (carName == null)
+        
+        if (carIndex == null)
         {
             Debug.LogWarning("Spawning default car");
-            _car = Instantiate(Resources.Load<GameObject>("Cars/" + ProjectConstantKeys.DEFAULTCARPREFABNAME), _spawnPosition, quaternion, null);
-            _storageService.Save(ProjectConstantKeys.SELECTEDCARNAME, ProjectConstantKeys.DEFAULTCARPREFABNAME);
+            _car = Instantiate(Resources.Load<GameObject>("Cars/car" + ProjectConstantKeys.DEFAULTCARINDEX), _spawnPosition, _spawnRotation, null);
+            _storageService.Save(ProjectConstantKeys.SELECTEDCARINDEX, ProjectConstantKeys.DEFAULTCARINDEX);
         }
         else
         {
-            Debug.LogWarning("Spawning car: " + carName);
-            _car = Instantiate(Resources.Load<GameObject>("Cars/" + carName), _spawnPosition, quaternion, null);
+            Debug.LogWarning("Spawning car: " + carIndex);
+            _car = Instantiate(Resources.Load<GameObject>("Cars/car" + carIndex), _spawnPosition, _spawnRotation, null);
         }
         Destroy(_car.GetComponent<PrometeoCarController>());
+    }
+
+    private void DestroyOldCar()
+    {
+        Destroy(_car);
     }
 }

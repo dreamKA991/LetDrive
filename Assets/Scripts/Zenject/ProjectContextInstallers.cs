@@ -3,8 +3,10 @@ using Zenject;
 
 public class ProjectContextInstallers : MonoInstaller
 {
+    public MarketConfig MarketConfig;
     public override void InstallBindings()
     {
+        Container.Bind<MarketConfig>().FromInstance(MarketConfig).AsSingle().NonLazy();
         BindServices();
     }
 
@@ -12,14 +14,14 @@ public class ProjectContextInstallers : MonoInstaller
     {
         Container.Bind<IStorageService>().To<JsonToFileStorageService>().FromNew().AsSingle().NonLazy();
         
-        Container.Bind<PlayerSaveLoadService>().To<PlayerSaveLoadService>().FromNew().AsSingle().NonLazy();
+        Container.Bind<PlayerDataService>().FromNew().AsSingle().NonLazy();
         
         AudioSetterService audioSetterService = Container.InstantiateComponentOnNewGameObject<AudioSetterService>();
-        Container.Bind<AudioSetterService>().To<AudioSetterService>().FromInstance(audioSetterService).AsSingle().NonLazy();
+        Container.Bind<AudioSetterService>().FromInstance(audioSetterService).AsSingle().NonLazy();
         
         GraphicSetterService graphicSetterService = Container.InstantiateComponentOnNewGameObject<GraphicSetterService>();
-        Container.Bind<GraphicSetterService>().To<GraphicSetterService>().FromInstance(graphicSetterService).AsSingle().NonLazy();
+        Container.Bind<GraphicSetterService>().FromInstance(graphicSetterService).AsSingle().NonLazy();
         
-        Container.Bind<SaveLoadPlayerSettingsService>().To<SaveLoadPlayerSettingsService>().FromNew().AsSingle().NonLazy();
+        Container.Bind<PlayerSettingsService>().FromNew().AsSingle().NonLazy();
     }
 }

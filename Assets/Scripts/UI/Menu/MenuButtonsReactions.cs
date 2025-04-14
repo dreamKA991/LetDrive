@@ -2,7 +2,6 @@ using Global.SaveLoad;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Zenject;
 
@@ -19,13 +18,13 @@ public class MenuButtonsReactions : MonoBehaviour
     private AudioSetterService _audioSetterService;
     private MenuAnimations _menuAnimations;
     private IStorageService _storageService;
-    private SaveLoadPlayerSettingsService _saveLoadPlayerSettingsService;
+    private PlayerSettingsService _playerSettingsService;
     
     [Inject]
-    private void Construct(IStorageService storageService, SaveLoadPlayerSettingsService saveLoadPlayerSettingsService)
+    private void Construct(IStorageService storageService, PlayerSettingsService playerSettingsService)
     {
         _storageService = storageService;
-        _saveLoadPlayerSettingsService = saveLoadPlayerSettingsService;
+        _playerSettingsService = playerSettingsService;
     }
 
     private void Start() => Init();
@@ -36,7 +35,7 @@ public class MenuButtonsReactions : MonoBehaviour
         _audioSetterService = GetComponent<AudioSetterService>();
         _menuAnimations = GetComponent<MenuAnimations>();
         SubscribeUIElements();
-        LoadSettings();
+        FirstLoadSettings();
     }
 
     private void SubscribeUIElements()
@@ -60,12 +59,12 @@ public class MenuButtonsReactions : MonoBehaviour
     
     public void SaveSettings()
     {
-        _saveLoadPlayerSettingsService.SaveSettings(_musicToggle.isOn, _musicSlider.value, _fpsDropdown.value);
+        _playerSettingsService.SaveSettings(_musicToggle.isOn, _musicSlider.value, _fpsDropdown.value);
     }
     
-    public void LoadSettings()
+    public void FirstLoadSettings()
     {
-        SettingsData settingsData = _saveLoadPlayerSettingsService.LoadSettings();
+        SettingsData settingsData = _playerSettingsService.LoadSettings();
 
         _musicToggle.isOn = settingsData.isMusicEnabled;
         OnMusicCheckBoxChanged(settingsData.isMusicEnabled);

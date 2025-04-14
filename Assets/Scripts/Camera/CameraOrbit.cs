@@ -18,8 +18,13 @@ public class CameraOrbit : MonoBehaviour
         Vector3 angles = transform.eulerAngles;
         currentXRotation = angles.x;
         currentYRotation = angles.y;
+        
+        Quaternion rotation = Quaternion.Euler(currentXRotation, currentYRotation, 0);
+        Vector3 direction = rotation * new Vector3(0, 0, -distance);
+        transform.position = target.position + direction;
         transform.LookAt(target);
     }
+
 
     void Update()
     {

@@ -10,16 +10,16 @@ public class MenuBOOT : MonoBehaviour
     private CharacterCarSpawnerFactory _characterCarSpawnerFactory;
     private RoadSpawnerFactory _roadSpawnerFactory;
     private CameraFollow _cameraFollow;
-    private SaveLoadPlayerSettingsService _saveLoadPlayerSettingsService;
+    private PlayerSettingsService _playerSettingsService;
 
     [Inject]
-    private void Construct(IStorageService storageService, CharacterCarSpawnerFactory characterCarSpawnerFactory, RoadSpawnerFactory roadSpawnerFactory, SaveLoadPlayerSettingsService saveLoadPlayerSettingsService)
+    private void Construct(IStorageService storageService, CharacterCarSpawnerFactory characterCarSpawnerFactory, RoadSpawnerFactory roadSpawnerFactory, PlayerSettingsService playerSettingsService)
     {
         _storageService = storageService;
         _characterCarSpawnerFactory = characterCarSpawnerFactory;
         _roadSpawnerFactory = roadSpawnerFactory;
         _cameraFollow = Camera.main.AddComponent<CameraFollow>();
-        _saveLoadPlayerSettingsService = saveLoadPlayerSettingsService;
+        _playerSettingsService = playerSettingsService;
     }
 
     private void Start()
@@ -37,6 +37,6 @@ public class MenuBOOT : MonoBehaviour
     
     private void LoadAndApplySettings()
     {
-        _saveLoadPlayerSettingsService.LoadAndApplySettings();
+        _playerSettingsService.LoadAndApplySettings();
     }
 }

@@ -2,11 +2,11 @@ using Zenject;
 
 public class GarageInstaller : MonoInstaller
 {
-    public MarketConfig MarketConfig;
-    
+
+    public GarageUIReactionService GarageUIReactionService;
     public override void InstallBindings()
     {
-        Container.Bind<MarketConfig>().FromInstance(MarketConfig).AsSingle();
+        
         BindServices();
     }
 
@@ -14,5 +14,9 @@ public class GarageInstaller : MonoInstaller
     {
         CarPodiumSpawnerService carPodiumSpawnerService = Container.InstantiateComponentOnNewGameObject<CarPodiumSpawnerService>();
         Container.Bind<CarPodiumSpawnerService>().FromInstance(carPodiumSpawnerService).AsSingle();
+        
+        Container.Bind<GarageUIReactionService>().FromInstance(GarageUIReactionService).AsSingle();
+        
+        Container.Bind<ShowCarCommand>().FromNew().AsSingle();
     }
 }

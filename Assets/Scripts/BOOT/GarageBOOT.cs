@@ -1,19 +1,16 @@
-using Global.SaveLoad;
 using UnityEngine;
 using Zenject;
 
 public class GarageBOOT : MonoBehaviour
 {
-    private IStorageService _storageService;
-    private SaveLoadPlayerSettingsService _saveLoadPlayerSettingsService;
-    CarPodiumSpawnerService _carPodiumSpawnerService;
+    private PlayerSettingsService _playerSettingsService;
+    private ShowCarCommand _showCarCommand;
 
     [Inject]
-    private void Construct(IStorageService storageService, SaveLoadPlayerSettingsService saveLoadPlayerSettingsService, CarPodiumSpawnerService carPodiumSpawnerService)
+    private void Construct(PlayerSettingsService playerSettingsService, ShowCarCommand showCarCommand)
     {
-        _storageService = storageService;
-        _saveLoadPlayerSettingsService = saveLoadPlayerSettingsService;
-        _carPodiumSpawnerService = carPodiumSpawnerService;
+        _playerSettingsService = playerSettingsService;
+        _showCarCommand = showCarCommand;
     }
 
     private void Start()
@@ -24,11 +21,12 @@ public class GarageBOOT : MonoBehaviour
     private void StartGame()
     {
         LoadAndApplySettings();
-        _carPodiumSpawnerService.SpawnFirstCar();
+        _showCarCommand.SpawnSavedSelectedCar();
+        _showCarCommand.UpdateMoneyText();
     }
     
     private void LoadAndApplySettings()
     {
-        _saveLoadPlayerSettingsService.LoadAndApplySettings();
+        _playerSettingsService.LoadAndApplySettings();
     }
 }
