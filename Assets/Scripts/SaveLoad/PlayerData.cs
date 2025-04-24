@@ -7,6 +7,6 @@ namespace Global.SaveLoad
     public class PlayerData
     {
         public int money;
-        public List<int> purchasedCarIndexes = new();
+        public List<PlayerCarData> CarDatas = new();
     }
 }

@@ -18,9 +18,12 @@ public class PlayerDataService
     public void SavePurchasedCar(int index)
     {
         var data = LoadData();
-        if (!data.purchasedCarIndexes.Contains(index))
+        
+        if (!data.CarDatas[index].isPurchased)
         {
-            data.purchasedCarIndexes.Add(index);
+            PlayerCarData carData = data.CarDatas[index];
+            carData.isPurchased = true;
+            data.CarDatas[index] = carData;
             _storageService.Save(ProjectConstantKeys.PLAYER_SAVE_DATA, data);
         }
     }
@@ -28,20 +31,36 @@ public class PlayerDataService
     public bool IsCarPurchased(int index)
     {
         var data = LoadData();
-        return data.purchasedCarIndexes.Contains(index);
+        return data.CarDatas[index].isPurchased;
     }
     
     public PlayerData LoadData()
     {
         var data = _storageService.Load<PlayerData>(ProjectConstantKeys.PLAYER_SAVE_DATA);
+    
         if (data == null)
         {
             data = new PlayerData();
-            data.purchasedCarIndexes.Add(int.Parse(ProjectConstantKeys.DEFAULTCARINDEX) - 1);
+            
+            for (int i = 0; i < _marketConfig.Cars.Count; i++)
+            {
+                data.CarDatas.Add(new PlayerCarData { isPurchased = false });
+            }
+            
+            int defaultIndex = int.Parse(ProjectConstantKeys.DEFAULTCARINDEX) - 1;
+            if (defaultIndex >= 0 && defaultIndex < data.CarDatas.Count)
+            {
+                var carData = data.CarDatas[defaultIndex];
+                carData.isPurchased = true;
+                data.CarDatas[defaultIndex] = carData;
+            }
+
             _storageService.Save(ProjectConstantKeys.PLAYER_SAVE_DATA, data);
         }
+
         return data;
     }
+
 
     public bool TryPurchaseCar(int index)
     {

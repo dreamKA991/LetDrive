@@ -8,18 +8,21 @@ public class GarageUIReactionService : MonoBehaviour
 {
     // PLAYER DATA
     [SerializeField] private TMP_Text _moneyText;
-    
+
     // CAR INFO 
     [SerializeField] private Slider _speedSlider;
     [SerializeField] private TMP_Text _speedText;
     [SerializeField] private TMP_Text _priceCarText;
-    
+    [SerializeField] private Button _speedUpgradeButton;
+
     [SerializeField] private Slider _handlingSlider;
     [SerializeField] private TMP_Text _handlingText;
-    
+    [SerializeField] private Button _handlingUpgradeButton;
+
     [SerializeField] private Slider _brakingSlider;
     [SerializeField] private TMP_Text _brakingText;
-    
+    [SerializeField] private Button _brakingUpgradeButton;
+
     // UI
     [SerializeField] private Button _playButton;
     [SerializeField] private Button _backMenuButton;
@@ -28,13 +31,13 @@ public class GarageUIReactionService : MonoBehaviour
     [SerializeField] private Button _selectPreviuosCarArrowButton;
 
     private ShowCarCommand _showCarCommand;
-    
+
     [Inject]
     private void Construct(ShowCarCommand showCarCommand)
     {
         _showCarCommand = showCarCommand;
     }
-    
+
     private void Start()
     {
         SubscribeButtons();
@@ -47,10 +50,13 @@ public class GarageUIReactionService : MonoBehaviour
         _selectNextCarArrowButton.onClick.AddListener(NextCarButtonPressed);
         _selectPreviuosCarArrowButton.onClick.AddListener(PreviousCarButtonPressed);
         _buyButton.onClick.AddListener(BuyButtonPressed);
+        _speedUpgradeButton.onClick.AddListener(SpeedUpgradeButtonPressed);
+        _handlingUpgradeButton.onClick.AddListener(HandlingUpgradeButtonPressed);
+        _brakingUpgradeButton.onClick.AddListener(BrakingUpgradeButtonPressed);
     }
 
     public void NextCarButtonPressed() => _showCarCommand.ShowNextCar();
-    
+
     public void PreviousCarButtonPressed() => _showCarCommand.ShowPreviousCar();
 
     public void BuyButtonPressed() => _showCarCommand.TryBuyCar();
@@ -65,12 +71,27 @@ public class GarageUIReactionService : MonoBehaviour
     {
         SceneManager.LoadSceneAsync("GamePlay");
     }
-    
+
     public void BackButtonPressed()
     {
         SceneManager.LoadSceneAsync("Menu");
     }
-    
+
+    public void SpeedUpgradeButtonPressed()
+    {
+        //
+    }
+
+    public void HandlingUpgradeButtonPressed()
+    {
+        //
+    }
+
+    public void BrakingUpgradeButtonPressed()
+    {
+        //
+    }
+
     public void SetSpeedUI(float value)
     {
         _speedSlider.value = value;
@@ -98,4 +119,27 @@ public class GarageUIReactionService : MonoBehaviour
     {
         _priceCarText.text = "COST: " + value.ToString();
     }
+
+    public void SetUpgradeButtonsActive(bool isActive)
+    {
+        SetSpeedUpgradeButtonActive(isActive);
+        SetHandlingUpgradeButtonActive(isActive);
+        SetBrakingUpgradeButtonActive(isActive);
+    }
+
+    public void SetSpeedUpgradeButtonActive(bool isActive)
+    {
+        _speedUpgradeButton.gameObject.SetActive(isActive);
+    }
+
+    public void SetHandlingUpgradeButtonActive(bool isActive)
+    {
+        _handlingUpgradeButton.gameObject.SetActive(isActive);
+    }
+
+    public void SetBrakingUpgradeButtonActive(bool isActive)
+    {
+        _brakingUpgradeButton.gameObject.SetActive(isActive);
+    }
+
 }
