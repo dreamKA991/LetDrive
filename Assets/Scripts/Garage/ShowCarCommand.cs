@@ -4,17 +4,20 @@ public class ShowCarCommand
 {
     private CarPodiumSpawnerService _carPodiumSpawnerService;
     private MarketConfig _marketConfig;
-    private GarageUIReactionService _garageUIReactionService;
+    private GarageUIView _garageUIView;
     private PlayerDataService _playerDataService;
+    private UpgradeService _upgradeService;
     private int _selectedCar;
-    
+
     [Inject]
-    private void Construct(CarPodiumSpawnerService carPodiumSpawnerService, MarketConfig marketConfig, GarageUIReactionService garageUIReactionService, PlayerDataService playerDataService)
+    private void Construct(CarPodiumSpawnerService carPodiumSpawnerService, MarketConfig marketConfig,
+        GarageUIView garageUIReactionService, PlayerDataService playerDataService, UpgradeService upgradeService)
     {
         _carPodiumSpawnerService = carPodiumSpawnerService;
         _marketConfig = marketConfig;
-        _garageUIReactionService = garageUIReactionService;
+        _garageUIView = garageUIReactionService;
         _playerDataService = playerDataService;
+        _upgradeService = upgradeService;
     }
 
     public void TryBuyCar()
@@ -24,6 +27,34 @@ public class ShowCarCommand
             UpdateMoneyText();
             UpdateAndSetActiveBuyUIGroup(false);
         }
+    }
+
+    private void TryBuyUpgrade(System.Action<int> upgradeAction)
+    {
+        if (_playerDataService.TryPurchaseUpgrade())
+        {
+            UpdateMoneyText();
+            upgradeAction(_selectedCar);
+            _upgradeService.UpdateUpgradeButtons(_selectedCar);
+        }
+    }
+
+    public void TryBuySpeedUpgrade()
+    {
+        TryBuyUpgrade(_upgradeService.UpgradeSpeed);
+        UpdateCarInfo();
+    }
+
+    public void TryBuyBrakeUpgrade()
+    {
+        TryBuyUpgrade(_upgradeService.UpgradeBrake);
+        UpdateCarInfo();
+    }
+
+    public void TryBuyHandlingUpgrade()
+    {
+        TryBuyUpgrade(_upgradeService.UpgradeHandling);
+        UpdateCarInfo();
     }
 
     public void SpawnSavedSelectedCar()
@@ -46,7 +77,7 @@ public class ShowCarCommand
     public void UpdateMoneyText()
     {
         var data = _playerDataService.LoadData();
-        _garageUIReactionService.SetMoneyText(data.money);
+        _garageUIView.SetMoneyText(data.Money);
     }
 
     private void SelectAndSpawnCar(int direction)
@@ -64,17 +95,20 @@ public class ShowCarCommand
         UpdateAndSetActiveBuyUIGroup(!isCarPurchased);
         UpdateCarInfo();
     }
-    
-    private void UpdateCarInfo()
-    {
-        _garageUIReactionService.SetSpeedUI(_marketConfig.Cars[_selectedCar].Speed);
-        _garageUIReactionService.SetHandlingUI(_marketConfig.Cars[_selectedCar].Handling);
-        _garageUIReactionService.SetBrakingUI(_marketConfig.Cars[_selectedCar].Braking);
-    }
 
     private void UpdateAndSetActiveBuyUIGroup(bool value)
     {
-        _garageUIReactionService.SetCarPriceText(_marketConfig.Cars[_selectedCar].Price);
-        _garageUIReactionService.SetActiveBuyButtonAndPriceText(value);
+        _garageUIView.SetCarPriceText(_marketConfig.Cars[_selectedCar].Price);
+        _garageUIView.SetActiveBuyButtonAndPriceText(value);
+
+        _upgradeService.UpdateUpgradeButtons(_selectedCar);
+    }
+    
+    private void UpdateCarInfo()
+    {
+        var data = _playerDataService.LoadData();
+        _garageUIView.SetSpeedUI(_marketConfig.Cars[_selectedCar].Speed + data.CarDatas[_selectedCar].speedLevel * 5f);
+        _garageUIView.SetHandlingUI(_marketConfig.Cars[_selectedCar].Handling + data.CarDatas[_selectedCar].handlingLevel * 5f);
+        _garageUIView.SetBrakingUI(_marketConfig.Cars[_selectedCar].Braking + data.CarDatas[_selectedCar].brakingLevel * 5f);
     }
 }

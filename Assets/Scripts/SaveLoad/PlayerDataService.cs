@@ -7,6 +7,7 @@ public class PlayerDataService
 {
     private IStorageService _storageService;
     private MarketConfig _marketConfig;
+    private const int UPGRADECOST = 500;
     
     [Inject]
     public void Construct(IStorageService storageService, MarketConfig marketConfig)
@@ -61,21 +62,38 @@ public class PlayerDataService
         return data;
     }
 
-
+    public void SavePlayerData(PlayerData data) => _storageService.Save(ProjectConstantKeys.PLAYER_SAVE_DATA, data);
+    
     public bool TryPurchaseCar(int index)
     {
-        var data = LoadData();
-        if (_marketConfig.Cars[index].Price > data.money)
+        if (TryPurchase(_marketConfig.Cars[index].Price))
         {
-            Debug.Log("Try to purchase car is failed, no money bro :(");
+            SavePurchasedCar(index);
+            return true;
+        } else return false;
+    }
+
+    public bool TryPurchaseUpgrade()
+    {
+        if(TryPurchase(UPGRADECOST)) 
+        {
+            return true;
+        } else return false;
+    }
+    
+    private bool TryPurchase(int cost)
+    {
+        var data = LoadData();
+        if (cost > data.Money)
+        {
+            Debug.Log("Try to purchase is failed, no money bro :(");
             return false;
         }
         else
         {
-            data.money -= _marketConfig.Cars[index].Price;
+            data.Money -= cost;
             _storageService.Save(ProjectConstantKeys.PLAYER_SAVE_DATA, data);
-            SavePurchasedCar(index);
-            Debug.Log("Try to purchase car is done :)");
+            Debug.Log("Try to purchase is done :)");
             return true;
         }
     }

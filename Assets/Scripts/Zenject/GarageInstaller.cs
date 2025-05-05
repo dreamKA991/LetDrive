@@ -3,10 +3,9 @@ using Zenject;
 public class GarageInstaller : MonoInstaller
 {
 
-    public GarageUIReactionService GarageUIReactionService;
+    public GarageUIView GarageUIView;
     public override void InstallBindings()
     {
-        
         BindServices();
     }
 
@@ -15,8 +14,10 @@ public class GarageInstaller : MonoInstaller
         CarPodiumSpawnerService carPodiumSpawnerService = Container.InstantiateComponentOnNewGameObject<CarPodiumSpawnerService>();
         Container.Bind<CarPodiumSpawnerService>().FromInstance(carPodiumSpawnerService).AsSingle();
         
-        Container.Bind<GarageUIReactionService>().FromInstance(GarageUIReactionService).AsSingle();
+        Container.Bind<GarageUIView>().FromInstance(GarageUIView).AsSingle();
         
         Container.Bind<ShowCarCommand>().FromNew().AsSingle();
+        
+        Container.Bind<UpgradeService>().FromNew().AsSingle();
     }
 }

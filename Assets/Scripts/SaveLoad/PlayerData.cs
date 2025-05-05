@@ -6,7 +6,7 @@ namespace Global.SaveLoad
     [Serializable]
     public class PlayerData
     {
-        public int money;
+        public int Money;
         public List<PlayerCarData> CarDatas = new();
     }
 }

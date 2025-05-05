@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Zenject;
 
-public class GarageUIReactionService : MonoBehaviour
+public class GarageUIView : MonoBehaviour
 {
     // PLAYER DATA
     [SerializeField] private TMP_Text _moneyText;
@@ -79,17 +79,17 @@ public class GarageUIReactionService : MonoBehaviour
 
     public void SpeedUpgradeButtonPressed()
     {
-        //
+        _showCarCommand.TryBuySpeedUpgrade();
     }
 
     public void HandlingUpgradeButtonPressed()
     {
-        //
+        _showCarCommand.TryBuyHandlingUpgrade();
     }
 
     public void BrakingUpgradeButtonPressed()
     {
-        //
+        _showCarCommand.TryBuyBrakeUpgrade();
     }
 
     public void SetSpeedUI(float value)
@@ -126,7 +126,7 @@ public class GarageUIReactionService : MonoBehaviour
         SetHandlingUpgradeButtonActive(isActive);
         SetBrakingUpgradeButtonActive(isActive);
     }
-
+ 
     public void SetSpeedUpgradeButtonActive(bool isActive)
     {
         _speedUpgradeButton.gameObject.SetActive(isActive);
