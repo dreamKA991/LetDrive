@@ -93,13 +93,13 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
       [Header("CONTROLS")]
       [Space(10)]
       [SerializeField] private bool useTouchControls = false;
-      [SerializeField] private GameObject throttleButton;
+      public GameObject throttleButton;
       PrometeoTouchInput throttlePTI;
-      [SerializeField] private GameObject reverseButton;
+      public GameObject reverseButton;
       PrometeoTouchInput reversePTI;
-      [SerializeField] private GameObject turnRightButton;
+      public GameObject turnRightButton;
       PrometeoTouchInput turnRightPTI;
-      [SerializeField] private GameObject turnLeftButton;
+      public GameObject turnLeftButton;
       PrometeoTouchInput turnLeftPTI;
 
     // AI GAME DATA
@@ -150,7 +150,7 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
         _roadConfig = roadConfig;
       }
 
-    void Start()
+    private void Start()
     {
       carRigidbody = GetComponent<Rigidbody>();
       carRigidbody.centerOfMass = bodyMassCenter;
@@ -247,7 +247,7 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
 
     }
     
-    void Update()
+    private void Update()
     {
 
       //CAR DATA
@@ -369,6 +369,14 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
 
     }
 
+    private void OnCollisionEnter(Collision other)
+    {
+      Debug.Log("OnCollisionEnter called. " + IsBot);
+      if (IsBot) return;
+      
+      SignalBus.onCharacterLose?.Invoke();
+    }
+
     //
     //STEERING METHODS
     //
@@ -403,7 +411,6 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
     }
     
     public void ResetSteeringAngle(){
-      Debug.Log("ResetSteeringAngle");
       if(steeringAxis < 0f){
         steeringAxis = steeringAxis + (Time.deltaTime * 10f * steeringSpeed);
       }else if(steeringAxis > 0f){
@@ -424,7 +431,6 @@ public class PrometeoCarController : MonoBehaviour, ICharacterCar
     
     public void AIResetSteeringAngle()
     {
-      Debug.Log("AIResetSteeringAngle");
       steeringAxis = 0f;
       float steeringAngle = 0f;
 

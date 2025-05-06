@@ -43,7 +43,7 @@ public class MenuButtonsReactions : MonoBehaviour
         _musicToggle.onValueChanged.AddListener(OnMusicCheckBoxChanged);
         _musicSlider.onValueChanged.AddListener(OnMusicSliderChanged);
         _fpsDropdown.onValueChanged.AddListener(OnFpsTargetDropdownChanged);
-        _playButton.onClick.AddListener(PlayButtonPressed);
+        if(_playButton != null) _playButton.onClick.AddListener(PlayButtonPressed);
         _settingsButton.onClick.AddListener(SettingsButtonPressed);
         _backButton.onClick.AddListener(BackButtonPressed);
     }

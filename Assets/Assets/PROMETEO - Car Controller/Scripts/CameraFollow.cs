@@ -9,13 +9,13 @@ public class CameraFollow : MonoBehaviour {
 	private Vector3 initialCarPosition;
 	private Vector3 absoluteInitCameraPosition;
 	private Vector3 _menuStartPosition = new Vector3(10f,3f, 6.4f);
-	private Vector3 _gamePlayStartPosition = new Vector3(0, 0, 0);
+	private Vector3 _gamePlayOffset = new Vector3(0f, 4f, -7f);
 
-	public void Init(ICharacterCar iCharacterCar, bool isUseGamePlayTransform)
+	public void Init(ICharacterCar iCharacterCar, bool isGamePlayScene)
 	{
 		_carTransform = iCharacterCar.GetTransform();
-		if(isUseGamePlayTransform) transform.position = _gamePlayStartPosition;
-		else transform.position = _menuStartPosition;
+		if (isGamePlayScene) ApplyGamePlayCameraSettings(iCharacterCar);
+		else ApplyMenuCameraSettings();
 		StartWork();
 	}
 
@@ -23,6 +23,22 @@ public class CameraFollow : MonoBehaviour {
 		initialCameraPosition = gameObject.transform.position;
 		initialCarPosition = _carTransform.position;
 		absoluteInitCameraPosition = initialCameraPosition - initialCarPosition;
+	}
+	
+	private void ApplyMenuCameraSettings()
+	{
+		transform.position = _menuStartPosition;
+	}
+
+	private void ApplyGamePlayCameraSettings(ICharacterCar iCharacterCar)
+	{
+		Camera camera = GetComponent<Camera>();
+		camera.orthographic = false;
+		camera.fieldOfView = 48f;
+		camera.nearClipPlane = 0.1f;
+		camera.farClipPlane = 1000f;
+
+		transform.position = _carTransform.position + _gamePlayOffset;
 	}
 
 	private void FixedUpdate()

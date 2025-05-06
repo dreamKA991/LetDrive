@@ -16,7 +16,7 @@ public class CharacterCarSpawnerFactory : MonoBehaviour
         transform.position = new Vector3(_container.Resolve<RoadConfig>().XCoordLines[ROADLANESPAWN],0.1f ,0);
     }
 
-    public ICharacterCar LoadAndSpawnCar(bool isBot = true)
+    public PrometeoCarController LoadAndSpawnCar(bool isBot = true)
     {
         string carIndex = _storageService.Load<string>(ProjectConstantKeys.SELECTEDCARINDEX);
         Quaternion quaternion = Quaternion.Euler(0, 0, 0);

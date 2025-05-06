@@ -64,6 +64,16 @@ public class PlayerDataService
 
     public void SavePlayerData(PlayerData data) => _storageService.Save(ProjectConstantKeys.PLAYER_SAVE_DATA, data);
     
+    public void SaveSelectedCar(int index) => _storageService.Save(ProjectConstantKeys.SELECTEDCARINDEX, index + 1);
+
+    public void AddMoney(int value)
+    {
+        if (value <= 0) return;
+        var data = LoadData();
+        data.Money += value;
+        _storageService.Save(ProjectConstantKeys.PLAYER_SAVE_DATA, data);
+    }
+    
     public bool TryPurchaseCar(int index)
     {
         if (TryPurchase(_marketConfig.Cars[index].Price))

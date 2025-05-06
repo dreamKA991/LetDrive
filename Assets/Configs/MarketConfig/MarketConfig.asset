@@ -19,15 +19,15 @@ MonoBehaviour:
     Speed: 50
     Handling: 50
     Braking: 50
-  - Name: Sweetie BolotoCar
+  - Name: Default
     Price: 500
-    Prefab: {fileID: 6627719025246014540, guid: 373cc3ec7788ee249be352ec2de6f2c6, type: 3}
+    Prefab: {fileID: 6627719025246014540, guid: 87ac5ce1df2a64407bd9d0137b2d68b5, type: 3}
     Speed: 75
     Handling: 75
     Braking: 75
-  - Name: Kinda Homer Simpson
+  - Name: Offroad
     Price: 1000
-    Prefab: {fileID: 6627719025246014540, guid: e6b2975bcd5521740ac359c6b9e46383, type: 3}
+    Prefab: {fileID: 6627719025246014540, guid: 373cc3ec7788ee249be352ec2de6f2c6, type: 3}
     Speed: 100
     Handling: 100
     Braking: 100

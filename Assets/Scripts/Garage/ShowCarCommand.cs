@@ -1,3 +1,4 @@
+using Global.SaveLoad;
 using Zenject;
 
 public class ShowCarCommand
@@ -11,13 +12,14 @@ public class ShowCarCommand
 
     [Inject]
     private void Construct(CarPodiumSpawnerService carPodiumSpawnerService, MarketConfig marketConfig,
-        GarageUIView garageUIReactionService, PlayerDataService playerDataService, UpgradeService upgradeService)
+        GarageUIView garageUIReactionService, PlayerDataService playerDataService, UpgradeService upgradeService, IStorageService storageService)
     {
         _carPodiumSpawnerService = carPodiumSpawnerService;
         _marketConfig = marketConfig;
         _garageUIView = garageUIReactionService;
         _playerDataService = playerDataService;
         _upgradeService = upgradeService;
+        _selectedCar = int.Parse(storageService.Load<string>(ProjectConstantKeys.SELECTEDCARINDEX)) - 1;
     }
 
     public void TryBuyCar()
@@ -92,6 +94,7 @@ public class ShowCarCommand
         _carPodiumSpawnerService.SpawnCar(_selectedCar);
 
         bool isCarPurchased = _playerDataService.IsCarPurchased(_selectedCar);
+        if(isCarPurchased) _playerDataService.SaveSelectedCar(_selectedCar);
         UpdateAndSetActiveBuyUIGroup(!isCarPurchased);
         UpdateCarInfo();
     }
