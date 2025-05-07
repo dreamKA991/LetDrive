@@ -27,7 +27,7 @@ namespace Global.SaveLoad
             
             if (!File.Exists(path))
             {
-                return default; // Вернёт null для ссылочных типов или 0 / false для значимых типов
+                return default; 
             }
 
             using (var fileStream = new StreamReader(path))

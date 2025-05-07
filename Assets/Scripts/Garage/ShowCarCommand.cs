@@ -26,6 +26,7 @@ public class ShowCarCommand
     {
         if (_playerDataService.TryPurchaseCar(_selectedCar))
         {
+            _playerDataService.SaveSelectedCar(_selectedCar);
             UpdateMoneyText();
             UpdateAndSetActiveBuyUIGroup(false);
         }
